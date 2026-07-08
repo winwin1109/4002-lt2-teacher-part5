@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>新聞稿寫作特訓營：熱血漫畫版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -19,6 +19,7 @@
             font-family: 'Noto Sans TC', sans-serif; background-color: #f1f2f6; 
             background-image: var(--bg-halftone); background-size: 15px 15px;
             margin: 0; padding: 20px; color: var(--manga-black); line-height: 1.8;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* 全局計分板 */
@@ -33,7 +34,6 @@
         /* 漫畫主容器 */
         .container { max-width: 1200px; margin: 0 auto; background: var(--manga-white); border: 6px solid var(--manga-black); box-shadow: 12px 12px 0px var(--manga-black); padding: 40px; border-radius: 8px; position: relative; overflow: hidden; }
 
-        /* 漫畫標題樣式 */
         .manga-title {
             background: var(--manga-black); color: var(--manga-yellow); display: inline-block;
             padding: 10px 25px; font-size: 2rem; font-weight: 900; transform: skewX(-10deg);
@@ -41,16 +41,13 @@
             margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;
         }
 
-        .section-title {
-            font-size: 1.6rem; font-weight: 900; color: var(--manga-black); 
-            border-bottom: 5px solid var(--manga-blue); padding-bottom: 10px; margin-top: 50px;
-        }
+        .section-title { font-size: 1.6rem; font-weight: 900; color: var(--manga-black); border-bottom: 5px solid var(--manga-blue); padding-bottom: 10px; margin-top: 50px; }
 
         /* 頂部影片區 */
         .top-video-section {
             background: var(--manga-black); color: #fff; padding: 20px; border-radius: 8px; 
-            display: flex; align-items: center; gap: 25px; margin-bottom: 30px; 
-            box-shadow: 8px 8px 0 var(--manga-blue); flex-wrap: wrap;
+            display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; 
+            box-shadow: 8px 8px 0 var(--manga-blue);
         }
         .top-video-section img { width: 120px; border: 4px solid #fff; border-radius: 8px; transform: rotate(-3deg); }
 
@@ -59,7 +56,7 @@
         .hl-btn { 
             background: var(--manga-white); border: 3px solid var(--manga-black); padding: 8px 16px; 
             font-weight: 900; cursor: pointer; margin: 5px; box-shadow: 3px 3px 0px var(--manga-black);
-            transition: 0.1s; border-radius: 5px; font-family: inherit;
+            transition: 0.1s; border-radius: 5px; font-family: inherit; display: inline-block;
         }
         .hl-btn:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--manga-black); }
         .hl-btn.active { background: var(--manga-yellow); }
@@ -77,6 +74,31 @@
         .bg-image { background-color: #ffeaa7; border: 2px dashed #f39c12; }
         .bg-promo { background-color: #fab1a0; border: 2px dashed #e84393; }
 
+        /* 分析小點 (跳動特效) */
+        .analysis-dot {
+            display: inline-block; width: 18px; height: 18px; border-radius: 50%;
+            cursor: pointer; margin: 0 6px; vertical-align: middle; transition: 0.2s;
+        }
+        .analysis-dot:hover { transform: scale(1.3); }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 63, 52, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 63, 52, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 63, 52, 0); } }
+        @keyframes pulseQuote { 0% { box-shadow: 0 0 0 0 rgba(9, 132, 227, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(9, 132, 227, 0); } 100% { box-shadow: 0 0 0 0 rgba(9, 132, 227, 0); } }
+        @keyframes pulseSig { 0% { box-shadow: 0 0 0 0 rgba(11, 232, 129, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(11, 232, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(11, 232, 129, 0); } }
+        @keyframes pulseImage { 0% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(243, 156, 18, 0); } 100% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0); } }
+        @keyframes pulsePromo { 0% { box-shadow: 0 0 0 0 rgba(232, 67, 147, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(232, 67, 147, 0); } 100% { box-shadow: 0 0 0 0 rgba(232, 67, 147, 0); } }
+
+        .dot-red { background-color: #ff3f34; animation: pulseRed 2s infinite; }
+        .dot-quote { background-color: #0984e3; animation: pulseQuote 2s infinite; }
+        .dot-sig { background-color: #0be881; animation: pulseSig 2s infinite; }
+        .dot-image { background-color: #f39c12; animation: pulseImage 2s infinite; }
+        .dot-promo { background-color: #e84393; animation: pulsePromo 2s infinite; }
+
+        /* Modal (彈出視窗) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 52, 54, 0.8); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px);}
+        .modal-box { background: #fff; border-radius: 15px; padding: 30px; max-width: 600px; width: 85%; position: relative; border-top: 10px solid var(--manga-black); animation: bounceIn 0.3s; box-shadow: 10px 10px 0px rgba(0,0,0,0.5); max-height: 80vh; overflow-y: auto;}
+        @keyframes bounceIn { 0% { transform: scale(0.9); opacity:0; } 100% { transform: scale(1); opacity:1; } }
+        .close-btn { position: absolute; top: 15px; right: 15px; background: #f1f2f6; border: none; font-size: 1.2rem; cursor: pointer; border-radius: 50%; width: 35px; height: 35px; display:flex; justify-content:center; align-items:center; }
+        .close-btn:hover { background: #ff7675; color: white; }
+
         /* 策略卡片與用語守則 */
         .strategy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 10px; }
         .card { border: 4px solid var(--manga-black); padding: 20px; border-radius: 8px; box-shadow: 6px 6px 0px var(--manga-black); font-weight: bold; background: #fff; }
@@ -86,6 +108,8 @@
         .tone-card { border: 4px solid var(--manga-black); padding: 15px 20px; margin-bottom: 20px; box-shadow: 4px 4px 0 var(--manga-black); border-radius: 8px; background: #fff; }
         .tone-card h4 { margin: 0 0 10px 0; color: var(--manga-white); background: var(--manga-black); display: inline-block; padding: 5px 15px; border-radius: 5px; transform: skewX(-5deg); font-size: 1.2rem;}
         .tone-card ul { margin-bottom: 0; padding-left: 20px; font-weight: bold; line-height: 1.6;}
+        .tone-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .tone-row .tone-card { flex: 1; min-width: 250px; }
 
         /* 按鍵點開設計 (Accordion) */
         .accordion-btn {
@@ -95,7 +119,7 @@
             transition: 0.2s; box-shadow: 6px 6px 0px var(--manga-red); font-family: inherit;
         }
         .accordion-btn:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0px var(--manga-red); }
-        .accordion-btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--manga-red); }
+        .accordion-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--manga-red); }
         .accordion-btn.active { border-radius: 8px 8px 0 0; box-shadow: 6px 6px 0px var(--manga-black); color: var(--manga-white); background: var(--manga-blue); border-color: var(--manga-black);}
         .accordion-content {
             display: none; padding: 30px; border: 4px solid var(--manga-black); border-top: none; 
@@ -104,152 +128,166 @@
         .accordion-content.open { display: block; animation: slideDown 0.3s ease-out;}
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 通用遊戲重置按鈕 */
-        .reset-btn { background: var(--manga-black); color: var(--manga-white); border: 3px solid var(--manga-black); padding: 10px 20px; font-weight: 900; font-size: 1.1rem; cursor: pointer; box-shadow: 4px 4px 0px var(--manga-yellow); border-radius: 5px; margin-top: 15px; display: inline-block; transition: 0.1s; font-family: inherit; text-decoration: none;}
+        /* 通用遊戲按鈕與計分 */
+        .reset-btn { background: var(--manga-black); color: var(--manga-white); border: 3px solid var(--manga-black); padding: 10px 20px; font-weight: 900; font-size: 1.1rem; cursor: pointer; box-shadow: 4px 4px 0px var(--manga-yellow); border-radius: 5px; display: inline-block; transition: 0.1s; font-family: inherit; text-decoration: none;}
         .reset-btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--manga-yellow); }
+        .game-score-box { font-size: 1.3rem; font-weight: 900; padding: 5px 15px; border-radius: 5px; border: 3px solid #fff;}
+        .game-score-anim { transition: 0.2s; display: inline-block; }
 
-        /* ================= 遊戲區一：RPG 對話框風格 (導語練習) ================= */
-        .game-rpg {
-            background: #000080; border: 6px solid #ffffff; border-radius: 10px; padding: 30px; 
-            color: #ffffff; font-family: 'Courier New', monospace; font-weight: bold;
-            box-shadow: 0 0 0 6px #000080, 8px 8px 0px rgba(0,0,0,0.5); position: relative;
-        }
-        .rpg-tag { background: #ffffff; color: #000080; border: 2px solid #ffffff; padding: 5px 12px; cursor: pointer; margin-right: 10px; font-weight: 900; font-family: 'Noto Sans TC', sans-serif; border-radius: 3px;}
+        /* 遊戲區域樣式 */
+        .game-rpg { background: #000080; border: 6px solid #ffffff; border-radius: 10px; padding: 30px; color: #ffffff; font-family: 'Courier New', monospace; font-weight: bold; box-shadow: 0 0 0 6px #000080, 8px 8px 0px rgba(0,0,0,0.5); position: relative; }
+        .rpg-tag { background: #ffffff; color: #000080; border: 2px solid #ffffff; padding: 8px 15px; cursor: pointer; margin: 5px 10px 5px 0; font-weight: 900; font-family: 'Noto Sans TC', sans-serif; border-radius: 3px; display: inline-block;}
         .rpg-tag.active { background: var(--manga-red); color: white; border-color: var(--manga-red); }
-        .rpg-word { cursor: pointer; margin: 0 2px; transition: 0.2s; padding: 0 2px;} 
+        .rpg-word { cursor: pointer; margin: 0 2px; transition: 0.2s; padding: 2px;} 
         .rpg-word:hover { background: rgba(255,255,255,0.2); border-radius: 3px;}
         .rpg-word.correct { color: #ff3f34; font-weight: 900; text-shadow: 1px 1px 0px #fff; background: transparent;} 
 
-        /* ================= 遊戲區二：漫畫分鏡風格 (排序除錯) ================= */
-        .game-manga {
-            background: #ffffff; border: 5px solid var(--manga-black); padding: 30px;
-            box-shadow: 10px 10px 0px #d2dae2; border-radius: 2px 30px 2px 30px;
-            background-image: radial-gradient(#d2dae2 10%, transparent 11%); background-size: 10px 10px;
-        }
+        .game-manga { background: #ffffff; border: 5px solid var(--manga-black); padding: 30px; box-shadow: 10px 10px 0px #d2dae2; border-radius: 2px 30px 2px 30px; background-image: radial-gradient(#d2dae2 10%, transparent 11%); background-size: 10px 10px; }
         .manga-chip { background: #fff; border: 3px solid var(--manga-black); padding: 10px 20px; font-weight: 900; font-size: 1.1rem; cursor: pointer; margin: 5px; box-shadow: 4px 4px 0px var(--manga-black); display: inline-block; transform: rotate(-1deg); transition: 0.2s;}
         .manga-chip:hover { background: var(--manga-yellow); transform: rotate(1deg) scale(1.05); }
         .manga-drop { min-height: 80px; border: 4px dashed var(--manga-black); background: rgba(255,255,255,0.9); padding: 15px; margin-top: 15px; border-radius: 10px; display: flex; flex-wrap: wrap; gap: 10px;}
 
-        /* ================= 遊戲區三：MARIO 風格 (動詞迷宮) ================= */
-        .game-mario {
-            background: #5c94fc; border: 6px solid #000; border-radius: 10px; padding: 30px;
-            color: #fff; font-family: 'Courier New', monospace; font-weight: 900;
-            box-shadow: inset 0 -15px 0 rgba(0,0,0,0.15), 8px 8px 0px var(--manga-black);
-            text-align: center; position: relative; overflow: hidden;
-        }
+        .game-mario { background: #5c94fc; border: 6px solid #000; border-radius: 10px; padding: 30px; color: #fff; font-family: 'Courier New', monospace; font-weight: 900; box-shadow: inset 0 -15px 0 rgba(0,0,0,0.15), 8px 8px 0px var(--manga-black); text-align: center; position: relative; overflow: hidden; }
         .mario-cloud { position: absolute; background: #fff; border-radius: 50px; opacity: 0.8; }
         .mario-cloud::before, .mario-cloud::after { content: ''; position: absolute; background: #fff; border-radius: 50%; }
         .c1 { width: 60px; height: 20px; top: 20px; left: 40px; }
         .c1::before { width: 30px; height: 30px; top: -15px; left: 10px; }
         .c1::after { width: 25px; height: 25px; top: -10px; right: 5px; }
-        .c2 { width: 80px; height: 25px; top: 40px; right: 50px; }
+        .c2 { width: 80px; height: 25px; top: 40px; right: 10%; }
         .c2::before { width: 40px; height: 40px; top: -20px; left: 15px; }
         .c2::after { width: 30px; height: 30px; top: -10px; right: 10px; }
-
-        .mario-block {
-            background: #FBD000; border: 4px solid #000; color: #000; padding: 15px 30px;
-            font-size: 1.5rem; font-weight: 900; cursor: pointer; margin: 10px; text-transform: uppercase;
-            box-shadow: inset -4px -4px 0px #e58e26, inset 4px 4px 0px #fff; display: inline-block;
-            border-radius: 5px; text-shadow: 1px 1px 0px #fff; transition: 0.1s; position: relative; z-index: 2;
-        }
+        .mario-block { background: #FBD000; border: 4px solid #000; color: #000; padding: 15px 30px; font-size: 1.3rem; font-weight: 900; cursor: pointer; margin: 10px; text-transform: uppercase; box-shadow: inset -4px -4px 0px #e58e26, inset 4px 4px 0px #fff; display: inline-block; border-radius: 5px; text-shadow: 1px 1px 0px #fff; transition: 0.1s; position: relative; z-index: 2; }
         .mario-block:hover { transform: translateY(-5px); box-shadow: inset -4px -4px 0px #e58e26, inset 4px 4px 0px #fff, 0 5px 0 #000; }
         .mario-block:active { transform: translateY(0); box-shadow: inset -4px -4px 0px #e58e26, inset 4px 4px 0px #fff; }
-        
-        .mario-q-box {
-            background: #cc5500; border: 4px solid #000; padding: 20px; margin-bottom: 20px;
-            box-shadow: inset -4px -4px 0px #8a3300, inset 4px 4px 0px #ff9e5e; border-radius: 5px;
-            font-size: 1.4rem; color: #fff; text-shadow: 2px 2px 0px #000; position: relative; z-index: 2;
-        }
+        .mario-q-box { background: #cc5500; border: 4px solid #000; padding: 20px; margin-bottom: 20px; box-shadow: inset -4px -4px 0px #8a3300, inset 4px 4px 0px #ff9e5e; border-radius: 5px; font-size: 1.3rem; color: #fff; text-shadow: 2px 2px 0px #000; position: relative; z-index: 2; }
 
-        /* ================= 遊戲區四：視覺小說對話風格 (總結配對) ================= */
-        .game-vn {
-            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); border: 4px solid var(--manga-white);
-            border-radius: 15px; padding: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
-            color: #2d3436; font-weight: 900;
-        }
+        .game-vn { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); border: 4px solid var(--manga-white); border-radius: 15px; padding: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); color: #2d3436; font-weight: 900; }
         .vn-box { background: rgba(255,255,255,0.85); border: 3px solid var(--manga-white); padding: 15px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;}
-        .vn-select { padding: 10px; font-weight: bold; font-size: 1rem; border: 3px solid var(--manga-black); border-radius: 5px; outline: none; margin-top: 10px; width: 100%; cursor: pointer;}
+        .vn-select { padding: 10px; font-weight: bold; font-size: 1rem; border: 3px solid var(--manga-black); border-radius: 5px; outline: none; margin-top: 10px; width: 100%; cursor: pointer; background: #fff;}
         .vn-feedback { width: 100%; margin-top: 8px; font-size: 0.95rem; color: var(--manga-red); }
 
-        .feedback-icon { font-size: 1.5rem; margin-left: 10px; animation: pop 0.3s; }
+        .feedback-icon { font-size: 1.5rem; margin-left: 10px; animation: pop 0.3s; vertical-align: middle;}
         @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-        
         .error-shake { animation: shake 0.4s; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        /* ================= 手機版優化 (RWD) ================= */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 20px; border-width: 4px; box-shadow: 6px 6px 0px var(--manga-black); }
+            #global-score-board { font-size: 1.1rem; top: 10px; right: 10px; padding: 5px 10px; border-width: 2px; box-shadow: 2px 2px 0 var(--manga-red); }
+            .manga-title { font-size: 1.4rem; padding: 8px 15px; margin-top: 30px;}
+            .section-title { font-size: 1.3rem; margin-top: 30px;}
+            
+            .top-video-section { align-items: center; text-align: center; padding: 15px;}
+            .top-video-section > div { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+            .top-video-section h2 { font-size: 1.4rem !important; }
+            
+            .hl-btn { font-size: 0.95rem; padding: 6px 12px; margin: 3px; }
+            .strategy-grid, .tone-row { grid-template-columns: 1fr; display: flex; flex-direction: column; gap: 15px;}
+            .tone-card { min-width: 100%; }
+            
+            .accordion-btn { font-size: 1.1rem; padding: 12px 15px; }
+            .accordion-content { padding: 15px; }
+            
+            .game-rpg, .game-manga, .game-mario, .game-vn { padding: 15px; }
+            .game-score-box { font-size: 1rem; padding: 5px 10px; margin-bottom: 10px;}
+            .flex-mobile-col { flex-direction: column; align-items: flex-start !important; }
+            
+            .mario-q-box, .mario-block { font-size: 1.1rem; padding: 10px 15px; }
+            .vn-box { flex-direction: column; align-items: flex-start; }
+            .vn-box > div { width: 100%; }
+            .reset-btn { font-size: 1rem; padding: 8px 15px; width: 100%; text-align: center; margin-top: 10px; box-sizing: border-box;}
+        }
     </style>
 </head>
 <body>
 
-<!-- 全局計分板 -->
 <div id="global-score-board">
     ⭐ 總分: <span id="score-display" class="score-anim">0</span>
 </div>
 
 <div class="container">
     
-    <!-- 頂部影片區 -->
     <div class="top-video-section">
-        <img src="q1.jpg" alt="Video QR Code">
-        <div>
-            <h2 style="margin: 0 0 10px 0; color: var(--manga-yellow); font-size: 1.8rem; text-shadow: 2px 2px 0 #000;">🎬 任務素材：觀看都市農莊影片</h2>
-            <a href="https://lecturecapture.vtc.edu.hk/Panopto/Pages/Viewer.aspx?id=83a6f7cf-b999-4b42-b9e1-aabd00790be5" target="_blank" class="reset-btn" style="background: var(--manga-red); border-color: #fff; margin-top: 0;">
-                <i class="fa-solid fa-play"></i> 點擊觀看影片
-            </a>
+        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <img src="q1.jpg" alt="Video QR Code">
+            <div style="text-align: center;">
+                <h2 style="margin: 0 0 10px 0; color: var(--manga-yellow); font-size: 1.8rem; text-shadow: 2px 2px 0 #000;">🎬 任務素材：都市農莊短片</h2>
+                <a href="https://lecturecapture.vtc.edu.hk/Panopto/Pages/Viewer.aspx?id=83a6f7cf-b999-4b42-b9e1-aabd00790be5" target="_blank" class="reset-btn" style="background: var(--manga-red); border-color: #fff; margin-top: 0; box-shadow: 4px 4px 0 #000;">
+                    <i class="fa-solid fa-play"></i> 點擊觀看影片
+                </a>
+            </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; width: 100%; border: 2px dashed #fff; box-sizing: border-box;">
+            <h3 style="margin: 0 0 10px 0; color: var(--manga-yellow);">❓ 導入問題：</h3>
+            <p style="margin: 0; font-size: 1.1rem; color: #fff; font-weight: bold; line-height: 1.6;">
+                請觀看影片，找出具新聞價值或具有吸引力的內容。
+                <span class="analysis-dot dot-red" onclick="playSound('pop'); openAnalysis('影片內容分析', '<strong>參考答案：</strong><br><br>1. <strong>特殊性/罕見性：</strong>在繁華的市中心建立佔地達1.3萬平方呎的都市農莊。<br>2. <strong>影響性：</strong>耗資 2000 萬龐大資金打造，並提供多項設施如堆肥、農耕體驗。<br>3. <strong>趣味性：</strong>引入「五感治療」概念，讓都市人紓解壓力。<br>4. <strong>正面形象：</strong>推廣環保綠色文化（有機肥料）、聘請聽障農務助理，榮獲 LEED 金獎認證。', '#ff3f34')"></span>
+                <span style="font-size: 0.85rem; color: #d2dae2; margin-left: 5px; font-weight: normal;">(點擊紅點查看分析)</span>
+            </p>
         </div>
     </div>
 
     <div class="manga-title">💥 商業新聞稿寫作特訓營</div>
 
-    <!-- 課文區 -->
-    <div class="section-title" style="margin-top:20px;">📖 第一章：都市農莊新聞稿解析</div>
+    <div class="section-title" style="margin-top:10px;">📖 第一章：都市農莊新聞稿解析</div>
     
     <div class="hl-panel">
-        <h3 style="margin-top:0;">🔎 點擊按鈕，解密文章構造！</h3>
-        <button class="hl-btn" onclick="toggleHL('hl-who', 'bg-who', this)">何人/機構</button>
-        <button class="hl-btn" onclick="toggleHL('hl-when', 'bg-when', this)">何時</button>
-        <button class="hl-btn" onclick="toggleHL('hl-where', 'bg-where', this)">何地</button>
-        <button class="hl-btn" onclick="toggleHL('hl-what', 'bg-what', this)">何事</button>
-        <button class="hl-btn" onclick="toggleHL('hl-why', 'bg-why', this)">為何</button>
-        <button class="hl-btn" onclick="toggleHL('hl-how', 'bg-how', this)">如何</button>
-        <button class="hl-btn" onclick="toggleHL('hl-quote', 'bg-quote', this)">客觀引述</button>
-        <button class="hl-btn" onclick="toggleHL('hl-value', 'bg-value', this)">新聞價值</button>
-        <button class="hl-btn" style="border-color: #0be881;" onclick="toggleHL('hl-sig', 'bg-sig', this)">✨ 活動意義</button>
-        <button class="hl-btn" style="border-color: #ff3f34;" onclick="toggleHL('hl-grand', 'bg-grand', this)">🔥 活動盛況</button>
-        <button class="hl-btn" style="border-color: #f39c12;" onclick="toggleHL('hl-image', 'bg-image', this)">🌟 建立正面形象</button>
-        <button class="hl-btn" style="border-color: #e84393;" onclick="toggleHL('hl-promo', 'bg-promo', this)">📢 宣傳(報導近期活動)</button>
+        <h3 style="margin-top:0;">🔎 點擊按鈕，解密文章構造！（點擊文章小紅點可看分析）</h3>
+        <button class="hl-btn" onclick="playSound('pop'); toggleHL('hl-who', 'bg-who', this)">何人/機構</button>
+        <button class="hl-btn" onclick="playSound('pop'); toggleHL('hl-when', 'bg-when', this)">何時</button>
+        <button class="hl-btn" onclick="playSound('pop'); toggleHL('hl-where', 'bg-where', this)">何地</button>
+        <button class="hl-btn" onclick="playSound('pop'); toggleHL('hl-what', 'bg-what', this)">何事</button>
+        <button class="hl-btn" onclick="playSound('pop'); toggleHL('hl-why', 'bg-why', this)">為何</button>
+        <button class="hl-btn" onclick="playSound('pop'); toggleHL('hl-how', 'bg-how', this)">如何</button>
+        <button class="hl-btn" onclick="playSound('pop'); toggleHL('hl-quote', 'bg-quote', this)">客觀引述</button>
+        <button class="hl-btn" onclick="playSound('pop'); toggleHL('hl-value', 'bg-value', this)">新聞價值</button>
+        <button class="hl-btn" style="border-color: #0be881;" onclick="playSound('pop'); toggleHL('hl-sig', 'bg-sig', this)">✨ 活動意義</button>
+        <button class="hl-btn" style="border-color: #ff3f34;" onclick="playSound('pop'); toggleHL('hl-grand', 'bg-grand', this)">🔥 活動盛況</button>
+        <button class="hl-btn" style="border-color: #f39c12;" onclick="playSound('pop'); toggleHL('hl-image', 'bg-image', this)">🌟 建立正面形象</button>
+        <button class="hl-btn" style="border-color: #e84393;" onclick="playSound('pop'); toggleHL('hl-promo', 'bg-promo', this)">📢 報導近期活動(宣傳)</button>
     </div>
 
-    <div style="border: 4px solid var(--manga-black); padding: 30px; font-size: 1.15rem; background: #fff; box-shadow: 8px 8px 0px var(--manga-black);">
-        <h2 style="text-align: center; border-bottom: 3px double var(--manga-black); padding-bottom: 10px;">
+    <div style="border: 4px solid var(--manga-black); padding: 25px; font-size: 1.15rem; background: #fff; box-shadow: 8px 8px 0px var(--manga-black);">
+        <h2 style="text-align: center; border-bottom: 3px double var(--manga-black); padding-bottom: 10px; margin-top:0;">
+            <span class="analysis-dot dot-red" onclick="playSound('pop'); openAnalysis('標題分析', '<strong>分析：</strong><br>標題運用了「全港首個」突顯『特殊性』，並以「2000萬打造」點出投資規模的『影響性』。以獨特且龐大的數據瞬間抓住讀者眼球，引起對都市綠洲的好奇心。', '#ff3f34')"></span>
             新都會廣場 <span class="hl-txt hl-value">2000 萬打造</span>都市農莊<br>
             <span class="hl-txt hl-value">全港首個</span>全天候開放的都會綠洲正式開幕
         </h2>
-        <p style="text-indent: 2em;">
-            <span class="hl-txt hl-value">全港首個</span>全天候開放的<span class="hl-txt hl-what">都市農莊</span>，<span class="hl-txt hl-when">昨天</span>於<span class="hl-txt hl-where">葵芳新都會廣場 5 樓的空中花園</span><span class="hl-txt hl-what">正式開幕</span>。農莊佔地約 1.3 萬平方呎，由<span class="hl-txt hl-who">新地集團</span>耗資 2000 萬打造。現場<span class="hl-txt hl-how">設有農莊導賞、農耕體驗及田園工作坊等</span>，<span class="hl-txt hl-why">讓繁忙的都市人放下煩擾，享受另類的城市生活</span>。
+        <p>
+            &emsp;&emsp;<span class="hl-txt hl-value">全港首個</span>全天候開放的<span class="hl-txt hl-what">都市農莊</span>，<span class="hl-txt hl-when">昨天</span>於<span class="hl-txt hl-where">葵芳新都會廣場 5 樓的空中花園</span><span class="hl-txt hl-what">正式開幕</span>。農莊佔地約 1.3 萬平方呎，由<span class="hl-txt hl-who">新地集團</span>耗資 2000 萬打造。現場<span class="hl-txt hl-how">設有農莊導賞、農耕體驗及田園工作坊等</span>，<span class="hl-txt hl-why">讓繁忙的都市人放下煩擾，享受另類的城市生活</span>。<span class="analysis-dot dot-red" onclick="playSound('pop'); openAnalysis('導語分析', '<strong>分析：</strong><br>導語精準運用了 5W1H 結構，開門見山交代了最新鮮、最重要的資訊（全港首個、昨天開幕、耗資2000萬），絕不拖泥帶水，讓讀者在最短時間內掌握新聞輪廓，符合現代人快速閱讀的習慣。', '#ff3f34')"></span>
         </p>
-        <p style="text-indent: 2em;">
-            <strong>「五感治療」紓解壓力</strong><br>
-            <span class="hl-txt hl-quote">參與農莊開幕儀式的新地租務部總理王德新指，<span class="hl-txt hl-image">集團近年積極推廣環保綠色文化，希望提升港人生活素質</span>，剛剛開幕的都市農莊，引入「五感治療」新概念，讓市民通過親身體驗農作物收割、食用花蛋糕製作或製作押花吊墜等，<span class="hl-txt hl-sig">全方位體驗都市農莊帶來的樂趣，紓解都市人的生活壓力。</span></span> <span class="hl-txt hl-image">商場創新的自然理念還得到<span class="hl-txt hl-value">美國綠色建築委員會認可，獲頒「能源與環境設計標準認證」金獎</span>。</span>
+        <p>
+            &emsp;&emsp;<strong>「五感治療」紓解壓力</strong><br>
+            &emsp;&emsp;<span class="analysis-dot dot-quote" onclick="playSound('pop'); openAnalysis('引述分析 (管理層)', '<strong>分析：</strong><br>引述管理層的話，不僅表達了客觀中立，更透過強調「推廣環保綠色文化」與「提升港人生活素質」，成功為主辦方（新地集團）塑造了具備社會企業責任的正面形象。', '#0984e3')"></span><span class="hl-txt hl-quote">參與農莊開幕儀式的新地租務部總理王德新指，<span class="hl-txt hl-image">集團近年積極推廣環保綠色文化，希望提升港人生活素質</span>，剛剛開幕的都市農莊，引入「五感治療」新概念，讓市民通過親身體驗農作物收割、食用花蛋糕製作或製作押花吊墜等，<span class="hl-txt hl-sig">全方位體驗都市農莊帶來的樂趣，紓解都市人的生活壓力。<span class="analysis-dot dot-sig" onclick="playSound('pop'); openAnalysis('活動意義分析', '<strong>分析：</strong><br>點出「紓解都市人的生活壓力」，將單純的商業農莊活動昇華為對社會心理健康的關懷，突顯活動的深層意義。', '#0be881')"></span></span></span> <span class="hl-txt hl-image">商場創新的自然理念還得到<span class="hl-txt hl-value">美國綠色建築委員會認可，獲頒「能源與環境設計標準認證」金獎</span>。<span class="analysis-dot dot-image" onclick="playSound('pop'); openAnalysis('建立正面形象分析', '<strong>分析：</strong><br>帶出「獲頒綠色建築金獎」等權威認證，以及「積極推廣環保」的理念，以客觀事實大大提升企業的信譽與品牌好感度。', '#f39c12')"></span></span>
         </p>
-        <p style="text-indent: 2em;">
-            <strong>農耕體驗新鮮有趣</strong><br>
-            農莊開幕當天，現場舉辦導賞及農耕體驗活動，由專業農夫講解農莊的特點及運作模式。參加者亦可體驗播種和收割農作物的樂趣，<span class="hl-txt hl-quote">負責種植的農夫廖先生稱，農莊每年將種植超過四十種農作物，包括四季時令蔬果，還有烹調常用的香草，以及越來越流行的食用花，種類繁多，市民可以近距離觀賞並體驗農耕的樂趣。</span>
+        <p>
+            &emsp;&emsp;<strong>農耕體驗新鮮有趣</strong><br>
+            &emsp;&emsp;<span class="hl-txt hl-grand">現場舉辦導賞及農耕體驗活動，由專業農夫講解農莊的特點及運作模式。</span><span class="analysis-dot dot-grand" onclick="playSound('pop'); openAnalysis('活動盛況分析', '<strong>分析：</strong><br>具體描述「舉辦導賞」、「親手種苗、翻土」及「氣氛熱鬧」等動態畫面，能有效提升新聞稿的現場感，讓未參與的讀者也能感受到活動的熱烈氣氛，增加下次參與的意願。', '#ff3f34')"></span>參加者亦可體驗播種和收割農作物的樂趣，<span class="analysis-dot dot-quote" onclick="playSound('pop'); openAnalysis('引述分析 (專業農夫)', '<strong>分析：</strong><br>透過前線專業人員（農夫）的口吻，客觀地說明農作物的豐富種類與運作模式，增加了報導的專業度與可信度。', '#0984e3')"></span><span class="hl-txt hl-quote">負責種植的農夫廖先生稱，農莊每年將種植超過四十種農作物，包括四季時令蔬果，還有烹調常用的香草，以及越來越流行的食用花，種類繁多，市民可以近距離觀賞並體驗農耕的樂趣。</span>
         </p>
-        <p style="text-indent: 2em;">
-            <span class="hl-txt hl-grand">不少父母帶小朋友來參加農耕體驗，親手種苗、翻土。</span><span class="hl-txt hl-quote">參與活動的小朋友表示活動新鮮有趣，讓他認識不少農作物活動。</span> <span class="hl-txt hl-grand">現場還有田園工作坊，教導市民用香草和新鮮水果製作飲品，吸引不少年輕人動手製作，氣氛熱鬧。</span>
+        <p>
+            &emsp;&emsp;<span class="hl-txt hl-grand">不少父母帶小朋友來參加農耕體驗，親手種苗、翻土。</span><span class="analysis-dot dot-quote" onclick="playSound('pop'); openAnalysis('引述分析 (參與者)', '<strong>分析：</strong><br>透過真實參與者（小朋友）的童言童語，從用家角度證實了活動的趣味性，比主辦方自行推銷「很好玩」更具感染力與說服力。', '#0984e3')"></span><span class="hl-txt hl-quote">參與活動的小朋友表示活動新鮮有趣，讓他認識不少農作物活動。</span> <span class="hl-txt hl-grand">現場還有田園工作坊，教導市民用香草和新鮮水果製作飲品，吸引不少年輕人動手製作，氣氛熱鬧。</span>
         </p>
-        <p style="text-indent: 2em;">
-            <strong>有機蔬果直送餐桌</strong><br>
-            都市農莊由本地農夫及訓練有素的聽障農務助理定期打理，使用有機肥料耕作。場內還設置堆肥設施，仿效大自然有機物自然分解的過程，製成肥料為農作物施肥。<span class="hl-txt hl-promo">農莊還將與商場內的餐廳合作，於今年 8 月開始逢星期六推出「農莊到餐廳」菜式</span>，讓顧客品嚐最新鮮健康的創新菜式。
+        <p>
+            &emsp;&emsp;<strong>有機蔬果直送餐桌</strong><br>
+            &emsp;&emsp;都市農莊由本地農夫及訓練有素的聽障農務助理定期打理，使用有機肥料耕作。場內還設置堆肥設施，仿效大自然有機物自然分解的過程，製成肥料為農作物施肥。<span class="hl-txt hl-promo">農莊還將與商場內的餐廳合作，於今年 8 月開始逢星期六推出「農莊到餐廳」菜式</span>，讓顧客品嚐最新鮮健康的創新菜式。
         </p>
-        <p style="text-indent: 2em;">
-            <strong>綠色生活源源不絕</strong><br>
-            <span class="hl-txt hl-promo">農莊每逢週末，都會舉辦「都市農耕體驗（導賞及工作坊）」</span>，讓市民體驗農耕樂趣。同時，為配合都市農莊的開幕，<span class="hl-txt hl-promo">商場的戶外露天廣場亦於本月舉辦全港首個「城市露營嘉年華」</span>，讓市民在都市綠洲中露營和休閒放鬆。<span class="hl-txt hl-promo">商場內也將一連四個週六、日舉辦「低碳生活市集」，提供即製素食、健康食品、綠色環保產品及花系產品，供市民品嚐和購買。</span>
+        <p>
+            &emsp;&emsp;<strong>綠色生活源源不絕</strong><br>
+            &emsp;&emsp;<span class="hl-txt hl-promo">農莊每逢週末，都會舉辦「都市農耕體驗（導賞及工作坊）」</span>，讓市民體驗農耕樂趣。同時，為配合都市農莊的開幕，<span class="hl-txt hl-promo">商場的戶外露天廣場亦於本月舉辦全港首個「城市露營嘉年華」</span>，讓市民在都市綠洲中露營和休閒放鬆。<span class="hl-txt hl-promo">商場內也將一連四個週六、日舉辦「低碳生活市集」，提供即製素食、健康食品、綠色環保產品及花系產品，供市民品嚐和購買。<span class="analysis-dot dot-promo" onclick="playSound('pop'); openAnalysis('報導近期活動分析', '<strong>分析：</strong><br>在結尾順勢帶出「露營嘉年華」與「市集」等未來活動，巧妙地將新聞讀者轉化為潛在消費者，完美達成商業新聞稿的終極宣傳目的。', '#e84393')"></span></span>
         </p>
     </div>
 
-    <!-- 按鍵展開：策略簡介 -->
-    <button class="accordion-btn" onclick="toggleAccordion(this)">
+    <div id="analysis-modal" class="modal-overlay">
+        <div class="modal-box" id="analysis-box">
+            <button class="close-btn" onclick="closeModal('analysis-modal'); playSound('pop');">✖</button>
+            <h2 id="analysis-title" style="margin-top:0;"></h2>
+            <div id="analysis-text" style="font-size:1.1rem; line-height: 1.8; color: #2d3436;"></div>
+        </div>
+    </div>
+
+    <button class="accordion-btn" onclick="playSound('pop'); toggleAccordion(this)">
         <span>🧠 第二章：寫作核心策略與守則</span>
         <i class="fa-solid fa-chevron-down"></i>
     </button>
@@ -268,88 +306,93 @@
                     <li><strong>影響性：</strong>受惠人數多、牽涉範圍廣</li>
                     <li><strong>時間性：</strong>事件剛發生或即將舉行</li>
                     <li><strong>趣味性：</strong>反常、具人情味</li>
-                    <li><strong style="color:var(--manga-blue);">地域性：</strong>發生地點越近，越受讀者注目</li>
+                    <li><strong style="color:var(--manga-blue);">地域性：</strong>發生地點越近，越受注目</li>
                 </ul>
             </div>
         </div>
 
         <h3 style="color:var(--manga-black); border-bottom: 3px solid var(--manga-green); padding-bottom:5px; margin-top:30px;">二、 專業用語守則</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
             <div class="tone-card">
-                <h4>1. 第三人稱寫作 避免直接對話</h4>
+                <h4>1. 第三人稱寫作</h4>
                 <ul>
-                    <li>✅ <strong>正確示範：</strong>「該公司」、「該機構」、「市民」</li>
-                    <li>❌ <strong>避免使用：</strong>「本公司」、「我」、「你」</li>
+                    <li>✅ <strong>正確：</strong>「該公司」、「市民」</li>
+                    <li>❌ <strong>避免：</strong>「本公司」、「你」</li>
                 </ul>
             </div>
             <div class="tone-card">
-                <h4>2. 用詞配合時間 突顯時效</h4>
+                <h4>2. 用詞配合時間</h4>
                 <ul>
-                    <li>✅ <strong>突顯最新：</strong>「明天展開」、「昨天結束」</li>
+                    <li>✅ <strong>突顯時效：</strong>「明天展開」、「昨天結束」</li>
                 </ul>
             </div>
             <div class="tone-card">
-                <h4>3. 引述親身感受 表達客觀中立</h4>
+                <h4>3. 引述客觀中立</h4>
                 <ul>
-                    <li>✅ <strong>善用轉述詞：</strong>「稱」、「表示」、「指出」</li>
-                    <li>✅ <strong>並列意見：</strong>「另外」、「此外」保持中立</li>
+                    <li>✅ <strong>轉述詞：</strong>「稱」、「表示」、「指出」</li>
                 </ul>
             </div>
+        </div>
+        <div class="tone-row">
             <div class="tone-card">
                 <h4>4. 措詞恰當平實 切忌推銷</h4>
                 <ul>
-                    <li>❌ <strong>忌廣告推銷：</strong>「歡迎參加！」、「欲購從速！」</li>
-                    <li>✅ <strong>具體動詞：</strong>「選購」、「盡享」，提升現場感</li>
+                    <li>❌ <strong>忌廣告：</strong>「欲購從速！」</li>
+                    <li>✅ <strong>具體動詞：</strong>「選購」、「盡享」提升現場感</li>
                 </ul>
             </div>
-            <div class="tone-card" style="grid-column: 1 / -1;">
-                <h4>5. 數據增說服力 權威助可信度</h4>
+            <div class="tone-card">
+                <h4>5. 數據與權威認證 增可信度</h4>
                 <ul>
-                    <li>✅ <strong>具體數據：</strong>用「超過1,100家參展商」代替「很多商戶」</li>
-                    <li>✅ <strong>權威認證：</strong>引用專家、數據或獎項以取信讀者</li>
+                    <li>✅ <strong>具體數據：</strong>用「1,100家」代替「很多」</li>
+                    <li>✅ <strong>權威認證：</strong>引用專家、獎項取信讀者</li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- 按鍵展開：實戰闖關區 -->
-    <div class="section-title" style="border:none; margin-bottom:-10px;">⚔️ 第三章：實戰闖關區 (答對+2分 / 答錯-1分)</div>
+    <div class="section-title" style="border:none; margin-bottom:-10px;">⚔️ 第三章：實戰闖關區</div>
     
-    <!-- 關卡一 -->
-    <button class="accordion-btn" onclick="toggleAccordion(this)">
+    <button class="accordion-btn" onclick="playSound('pop'); toggleAccordion(this)">
         <span>🛡️ 關卡一：導語要素探測術</span>
         <i class="fa-solid fa-chevron-down"></i>
     </button>
     <div class="accordion-content">
         <div class="game-rpg">
-            <p style="color: #0be881; margin-top:0;">【系統提示】已隱藏底線提示！請先點擊上方目標屬性，再點選下方句子中隱藏的正確字詞。找對後字體會立刻變紅！</p>
+            <div class="flex-mobile-col" style="display: flex; justify-content: space-between; align-items: center; gap:10px;">
+                <p style="color: #0be881; margin-top:0;">【系統提示】無底線提示！點擊上方屬性，再點選下方隱藏的正確字詞。</p>
+                <div class="game-score-box" style="border-color: #ffd32a; color: #ffd32a;">本關得分：<span id="g1-score" class="game-score-anim">0</span></div>
+            </div>
             
             <div style="margin: 15px 0;">
-                <button class="rpg-tag" onclick="setG1('who', this)">何人 Who</button>
-                <button class="rpg-tag" onclick="setG1('when', this)">何時 When</button>
-                <button class="rpg-tag" onclick="setG1('where', this)">何地 Where</button>
-                <button class="rpg-tag" onclick="setG1('what', this)">何事 What</button>
+                <button class="rpg-tag" onclick="playSound('pop'); setG1('who', this)">何人 Who</button>
+                <button class="rpg-tag" onclick="playSound('pop'); setG1('when', this)">何時 When</button>
+                <button class="rpg-tag" onclick="playSound('pop'); setG1('where', this)">何地 Where</button>
+                <button class="rpg-tag" onclick="playSound('pop'); setG1('what', this)">何事 What</button>
             </div>
 
-            <div id="g1-q-text" style="font-size: 1.25rem; line-height: 2.2; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 5px;"></div>
+            <div id="g1-progress" style="font-size: 1.2rem; color: #ffd32a; margin-bottom: 5px;"></div>
+            <div id="g1-q-text" style="font-size: 1.2rem; line-height: 2.2; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 5px;"></div>
             <div id="g1-feedback" style="margin-top: 15px; font-size: 1.1rem; color: #ff3f34; height: 30px;"></div>
             
-            <div style="display:flex; justify-content: space-between; align-items:center; margin-top: 10px;">
-                <button class="reset-btn" style="border-color: #fff; box-shadow: 4px 4px 0px #fff;" onclick="initG1()">重新開始本關</button>
-                <div id="g1-progress" style="font-size: 1.2rem; color: #ffd32a;"></div>
+            <div style="text-align: right; margin-top: 10px;">
+                <button class="reset-btn" style="border-color: #fff; box-shadow: 4px 4px 0px #fff;" onclick="playSound('pop'); initG1()">重新開始本關</button>
             </div>
         </div>
     </div>
 
-    <!-- 關卡二 -->
-    <button class="accordion-btn" onclick="toggleAccordion(this)">
+    <button class="accordion-btn" onclick="playSound('pop'); toggleAccordion(this)">
         <span>🗯️ 關卡二：客觀轉述重組術</span>
         <i class="fa-solid fa-chevron-down"></i>
     </button>
     <div class="accordion-content">
         <div class="game-manga">
-            <p style="color: var(--manga-red); font-weight:bold; margin-top:0;">任務：點擊詞塊將句子完整排入組合區，完成後點擊「提交驗證」！<br>⚠️ 警告：必須剔除主觀的「第一人稱」干擾項！</p>
+            <div class="flex-mobile-col" style="display: flex; justify-content: space-between; align-items: flex-start; gap:10px;">
+                <p style="color: var(--manga-red); font-weight:bold; margin-top:0;">任務：將句子排入組合區，點擊「提交驗證」！必須剔除「第一人稱」干擾項！</p>
+                <div class="game-score-box" style="border-color: var(--manga-black); color: var(--manga-black);">本關得分：<span id="g2-score" class="game-score-anim">0</span></div>
+            </div>
             
+            <div id="g2-progress" style="font-size: 1.2rem; font-weight:900; color: var(--manga-black); margin-bottom: 5px;"></div>
             <div id="g2-bank" style="min-height: 50px; margin-bottom: 15px;"></div>
             
             <div style="font-weight:900; color:var(--manga-blue);">📝 組合區：</div>
@@ -357,19 +400,17 @@
             
             <div style="margin-top: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                 <button id="g2-check-btn" class="reset-btn" style="background:var(--manga-blue); margin-top:0;" onclick="checkG2Answer()">提交驗證</button>
-                <button id="g2-next-btn" class="reset-btn" style="background:var(--manga-green); color:#111; margin-top:0; display:none;" onclick="nextG2()">下一題</button>
-                <div id="g2-feedback" style="font-size: 1.15rem; font-weight:900;"></div>
+                <button id="g2-next-btn" class="reset-btn" style="background:var(--manga-green); color:#111; margin-top:0; display:none;" onclick="playSound('pop'); nextG2()">下一題</button>
+                <div id="g2-feedback" style="font-size: 1.1rem; font-weight:900;"></div>
             </div>
 
-            <div style="display:flex; justify-content: space-between; align-items:center; margin-top: 20px; border-top: 2px dashed #d2dae2; padding-top: 15px;">
-                <button class="reset-btn" style="margin-top:0;" onclick="initG2()">重新開始本關</button>
-                <div id="g2-progress" style="font-size: 1.2rem; font-weight:900; color: var(--manga-black);"></div>
+            <div style="text-align: right; margin-top: 20px; border-top: 2px dashed #d2dae2; padding-top: 15px;">
+                <button class="reset-btn" style="margin-top:0;" onclick="playSound('pop'); initG2()">重新開始本關</button>
             </div>
         </div>
     </div>
 
-    <!-- 關卡三 -->
-    <button class="accordion-btn" onclick="toggleAccordion(this)">
+    <button class="accordion-btn" onclick="playSound('pop'); toggleAccordion(this)">
         <span>🍄 關卡三：新聞動詞大冒險</span>
         <i class="fa-solid fa-chevron-down"></i>
     </button>
@@ -378,33 +419,38 @@
             <div class="mario-cloud c1"></div>
             <div class="mario-cloud c2"></div>
 
-            <p style="position: relative; z-index: 2; text-shadow: 1px 1px 0px #000; margin-top:0;">為句子敲擊出最具現場感或最專業的動詞磚塊！</p>
+            <div class="flex-mobile-col" style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index:2; gap:10px;">
+                <p style="text-shadow: 1px 1px 0px #000; margin-top:0;">敲擊出最具現場感或最專業的動詞磚塊！</p>
+                <div class="game-score-box" style="border-color: #fff; color: #fff; text-shadow: 2px 2px 0 #000;">本關得分：<span id="g3-score" class="game-score-anim">0</span></div>
+            </div>
             
+            <div id="g3-progress" style="font-size: 1.2rem; text-shadow: 2px 2px 0px #000; margin-bottom: 5px; text-align: left; position: relative; z-index:2;"></div>
             <div id="g3-q-text" class="mario-q-box"></div>
             <div id="g3-doors" style="display: flex; justify-content: center; flex-wrap: wrap; position: relative; z-index: 2;"></div>
             
-            <div id="g3-feedback" style="margin-top: 15px; font-size: 1.2rem; height: 50px; position: relative; z-index: 2; text-shadow: 1px 1px 0px #000;"></div>
+            <div id="g3-feedback" style="margin-top: 15px; font-size: 1.1rem; min-height: 50px; position: relative; z-index: 2; text-shadow: 1px 1px 0px #000;"></div>
 
-            <div style="display:flex; justify-content: space-between; align-items:center; margin-top: 20px; position: relative; z-index: 2;">
-                <button class="reset-btn" style="border-color: #FBD000; color:#FBD000; box-shadow: 4px 4px 0px #FBD000;" onclick="initG3()">RESTART STAGE</button>
-                <div id="g3-progress" style="font-size: 1.3rem; text-shadow: 2px 2px 0px #000;"></div>
+            <div style="text-align: right; margin-top: 10px; position: relative; z-index: 2;">
+                <button class="reset-btn" style="border-color: #FBD000; color:#FBD000; box-shadow: 4px 4px 0px #FBD000;" onclick="playSound('pop'); initG3()">RESTART STAGE</button>
             </div>
         </div>
     </div>
 
-    <!-- 關卡四 -->
-    <button class="accordion-btn" onclick="toggleAccordion(this)">
+    <button class="accordion-btn" onclick="playSound('pop'); toggleAccordion(this)">
         <span>🌸 關卡四：推廣要素總結戰</span>
         <i class="fa-solid fa-chevron-down"></i>
     </button>
     <div class="accordion-content">
         <div class="game-vn">
-            <p style="margin-top:0;">請為下列新聞稿摘錄，配對正確的宣傳策略（選擇後立刻判定）：</p>
+            <div class="flex-mobile-col" style="display: flex; justify-content: space-between; align-items: flex-start; gap:10px;">
+                <p style="margin-top:0;">為下列新聞稿摘錄，配對正確的宣傳策略：</p>
+                <div class="game-score-box" style="border-color: var(--manga-black); color: var(--manga-black);">本關得分：<span id="g4-score" class="game-score-anim">0</span></div>
+            </div>
             
             <div id="g4-container"></div>
             
             <div style="text-align: right; margin-top: 15px;">
-                <button class="reset-btn" style="background:#fff; color:var(--manga-black);" onclick="initG4()">重新開始本關</button>
+                <button class="reset-btn" style="background:#fff; color:var(--manga-black);" onclick="playSound('pop'); initG4()">重新開始本關</button>
             </div>
         </div>
     </div>
@@ -412,19 +458,111 @@
 </div>
 
 <script>
-    /* ================= 全局計分系統 ================= */
+    /* ================= Web Audio API 音效系統 ================= */
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+
+    function initAudio() {
+        if (!audioCtx) { audioCtx = new AudioContext(); }
+        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+    }
+
+    function playTone(freq, type, duration, vol=0.1, slideFreq=null) {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type; 
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        if(slideFreq) {
+            osc.frequency.exponentialRampToValueAtTime(slideFreq, audioCtx.currentTime + duration);
+        }
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playSound(effect) {
+        initAudio();
+        switch(effect) {
+            case 'pop': // WhatsApp / 按鈕提示
+                playTone(800, 'sine', 0.1, 0.15); 
+                setTimeout(()=>playTone(1200, 'sine', 0.15, 0.15), 80); 
+                break;
+            case 'rpg-right': 
+                playTone(600, 'square', 0.1, 0.1); 
+                setTimeout(()=>playTone(800, 'square', 0.15, 0.1), 100); 
+                break;
+            case 'rpg-wrong': 
+                playTone(200, 'sawtooth', 0.3, 0.1); 
+                break;
+            case 'manga-right': 
+                playTone(1000, 'sine', 0.1, 0.1); 
+                setTimeout(()=>playTone(1500, 'sine', 0.2, 0.1), 100); 
+                break;
+            case 'manga-wrong': 
+                playTone(300, 'triangle', 0.2, 0.1, 150); 
+                break;
+            case 'mario-coin': 
+                playTone(987.77, 'square', 0.08, 0.1); 
+                setTimeout(()=>playTone(1318.51, 'square', 0.3, 0.1), 80); 
+                break;
+            case 'mario-bump': 
+                playTone(150, 'square', 0.15, 0.15); 
+                break;
+            case 'mario-clear': 
+                [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+                    setTimeout(() => playTone(f, 'square', 0.15, 0.1), i * 150);
+                });
+                break;
+            case 'vn-right': 
+                playTone(1200, 'sine', 0.2, 0.1); 
+                break;
+            case 'vn-wrong': 
+                playTone(400, 'sine', 0.3, 0.1, 300); 
+                break;
+            case 'win':
+                [440, 554.37, 659.25, 880].forEach((f, i) => {
+                    setTimeout(() => playTone(f, 'sine', 0.2, 0.1), i * 100);
+                });
+                break;
+        }
+    }
+
+    /* ================= 彈出分析視窗 ================= */
+    function openAnalysis(title, text, color) {
+        document.getElementById('analysis-title').innerText = title;
+        document.getElementById('analysis-title').style.color = color;
+        document.getElementById('analysis-text').innerHTML = text;
+        document.getElementById('analysis-box').style.borderTopColor = color;
+        document.getElementById('analysis-modal').style.display = 'flex';
+    }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    /* ================= 獨立與全局計分系統 ================= */
+    let scores = { g1: 0, g2: 0, g3: 0, g4: 0 };
     let globalScore = 0;
     
-    function updateScore(points) {
+    function updateGameScore(gameId, points) {
+        scores[gameId] += points;
         globalScore += points;
-        let display = document.getElementById('score-display');
-        display.innerText = globalScore;
+        
+        let display = document.getElementById(gameId + '-score');
+        display.innerText = scores[gameId];
         display.style.color = points > 0 ? '#0be881' : '#ff3f34';
         display.style.transform = "scale(1.5)";
-        
-        setTimeout(() => {
-            display.style.color = 'var(--manga-yellow)';
-            display.style.transform = "scale(1)";
+        setTimeout(() => { 
+            display.style.color = (gameId === 'g3' || gameId === 'g1') ? '#ffd32a' : 'inherit';
+            display.style.transform = "scale(1)"; 
+        }, 300);
+
+        let globalDisplay = document.getElementById('score-display');
+        globalDisplay.innerText = globalScore;
+        globalDisplay.style.color = points > 0 ? '#0be881' : '#ff3f34';
+        globalDisplay.style.transform = "scale(1.5)";
+        setTimeout(() => { 
+            globalDisplay.style.color = 'var(--manga-yellow)';
+            globalDisplay.style.transform = "scale(1)"; 
         }, 300);
     }
 
@@ -433,7 +571,6 @@
         btn.classList.toggle('active');
         let content = btn.nextElementSibling;
         let icon = btn.querySelector('.fa-solid');
-        
         if (content.style.display === "block" || content.classList.contains('open')) {
             content.classList.remove('open');
             content.style.display = "none";
@@ -460,12 +597,14 @@
         { text: "本公司 <span class='rpg-word' data-type='who'>獅保龍</span> 將於 <span class='rpg-word' data-type='when'>下個月</span> 在 <span class='rpg-word' data-type='where'>全線分店</span> 推出 <span class='rpg-word' data-type='what'>以諷刺時弊為主題的 Q 版肖像 T 恤</span>。" },
         { text: "<span class='rpg-word' data-type='who'>東華三院與雷霆 881</span> 將於 <span class='rpg-word' data-type='when'>7 月 24 日</span> 假 <span class='rpg-word' data-type='where'>鑽石山荷里活廣場</span>，聯手舉辦 <span class='rpg-word' data-type='what'>「愛心滿東華免費醫療服務捐助計劃」推廣活動</span>。" },
         { text: "由 <span class='rpg-word' data-type='who'>渣打香港和田徑總會</span> 主辦的 <span class='rpg-word' data-type='what'>馬拉松籌款活動</span> 於 <span class='rpg-word' data-type='when'>昨天</span> 在 <span class='rpg-word' data-type='where'>維多利亞公園</span> 順利完成。" },
-        { text: "全港首個 <span class='rpg-word' data-type='what'>都市農莊</span>，<span class='rpg-word' data-type='when'>昨天</span> 於 <span class='rpg-word' data-type='where'>葵芳新都會廣場</span> 正式開幕，由 <span class='rpg-word' data-type='who'>新地集團</span> 耗資 2000 萬打造。" },
+        { text: "全港首個 <span class='rpg-word' data-type='what'>都市農莊</span>，<span class='rpg-word' data-type='when'>昨天</span> 於 <span class='rpg-word' data-type='where'>葵芳新都會廣場</span> <span class='rpg-word' data-type='what'>正式開幕</span>，由 <span class='rpg-word' data-type='who'>新地集團</span> 耗資 2000 萬打造。" },
         { text: "由 <span class='rpg-word' data-type='who'>香港貿易發展局</span> 主辦的 <span class='rpg-word' data-type='what'>美食博覽</span> 業已於 <span class='rpg-word' data-type='when'>昨天</span> 圓滿結束，於 <span class='rpg-word' data-type='where'>香港會議展覽中心</span> 舉行。" },
         { text: "<span class='rpg-word' data-type='what'>香港潑水節</span>由 <span class='rpg-word' data-type='when'>本月 12 日起</span>，一連六日，在 <span class='rpg-word' data-type='where'>荔枝角 D2 Place</span> 舉行，由 <span class='rpg-word' data-type='who'>瑞星集團</span> 主辦。" }
     ];
     let g1Tag = null;
     let g1Index = 0;
+    let wordsFound = 0;
+    let wordsToFind = 0;
 
     function setG1(tag, btn) {
         document.querySelectorAll('.rpg-tag').forEach(b => b.classList.remove('active'));
@@ -475,6 +614,11 @@
     }
 
     function initG1() {
+        globalScore -= scores['g1']; 
+        scores['g1'] = 0;
+        document.getElementById('g1-score').innerText = "0";
+        document.getElementById('score-display').innerText = globalScore;
+
         g1Index = 0;
         loadG1();
     }
@@ -482,23 +626,30 @@
     function loadG1() {
         let fb = document.getElementById('g1-feedback');
         fb.innerText = "";
+        wordsFound = 0;
         
         if(g1Index >= g1DataTemplate.length) {
+            playSound('win');
             document.getElementById('g1-q-text').innerHTML = "🌟 恭喜！導語探測任務全部完成！";
             return;
         }
-        document.getElementById('g1-progress').innerText = `目前進度：${g1Index + 1} / 6`;
+        document.getElementById('g1-progress').innerText = `第 ${g1Index + 1} 題 / 共 6 題`;
         let area = document.getElementById('g1-q-text');
         area.innerHTML = g1DataTemplate[g1Index].text;
         
         let words = area.querySelectorAll('.rpg-word');
-        let wordsToFind = words.length;
-        let wordsFound = 0;
+        // 計算獨立的屬性數量，必須全部找齊才能過關
+        let uniqueTypes = new Set(Array.from(words).map(w => w.getAttribute('data-type')));
+        wordsToFind = uniqueTypes.size; 
+        
+        // 追蹤本題已找到的屬性
+        let foundTypes = new Set();
 
         words.forEach(el => {
             el.onclick = function() {
                 if(this.classList.contains('correct')) return; 
                 if(!g1Tag) { 
+                    playSound('pop');
                     fb.innerText = "⚠️ 系統警告：請先在上方選擇一個目標標籤！"; 
                     fb.style.color = "#ffd32a";
                     return; 
@@ -507,23 +658,34 @@
                 let clickedType = this.getAttribute('data-type');
                 
                 if(clickedType === g1Tag) {
-                    this.classList.add('correct'); 
-                    updateScore(2);
+                    playSound('rpg-right');
+                    // 同步標記所有同 tag 的文字 (專為第4題設計)
+                    let matchingWords = area.querySelectorAll(`.rpg-word[data-type='${g1Tag}']`);
+                    matchingWords.forEach(w => {
+                        if(!w.classList.contains('correct')) {
+                            w.classList.add('correct');
+                            let icon = document.createElement('span');
+                            icon.className = 'feedback-icon';
+                            icon.innerText = "✅";
+                            w.after(icon);
+                        }
+                    });
+                    
+                    updateGameScore('g1', 2);
                     fb.innerText = `✅ 正確找出「${g1Map[g1Tag]}」！ (+2分)`;
                     fb.style.color = "#0be881";
                     
-                    let icon = document.createElement('span');
-                    icon.className = 'feedback-icon';
-                    icon.innerText = "✅";
-                    this.after(icon);
+                    foundTypes.add(g1Tag);
                     
-                    wordsFound++;
-                    if(wordsFound === wordsToFind) {
-                        fb.innerText = "🎉 本題完成！準備進入下一題...";
+                    if(foundTypes.size === wordsToFind) {
+                        fb.innerText = "🎉 本題全數找齊！準備進入下一題...";
                         setTimeout(() => { g1Index++; loadG1(); }, 1200);
+                    } else {
+                        fb.innerText += ` (還剩 ${wordsToFind - foundTypes.size} 個要素待尋找)`;
                     }
                 } else {
-                    updateScore(-1);
+                    playSound('rpg-wrong');
+                    updateGameScore('g1', -1);
                     fb.innerHTML = `❌ 錯誤！你點擊的是「<span style='color:#fff;'>${g1Map[clickedType]}</span>」，請尋找「<span style='color:#fff;'>${g1Map[g1Tag]}</span>」！ (-1分)`;
                     fb.style.color = "#ff3f34";
                 }
@@ -531,7 +693,7 @@
         });
     }
 
-    /* ================= 關卡二：漫畫分鏡 排序 (先排完再檢查，專屬錯誤回饋) ================= */
+    /* ================= 關卡二：漫畫分鏡 排序 ================= */
     let g2Data = [
         { seq: ["黃同學受訪時指", "水戰派對刺激好玩", "明年還會再來"], bad: "我們覺得", errOrder: "請先指出是誰說話，再說明她的感受，最後講述她未來的行動。", solved: false },
         { seq: ["陳小姐表示", "活動設親子區", "讓孩子更安全"], bad: "我認為", errOrder: "請先引述發言者，再點出活動特點，最後說明該特點帶來的好處。", solved: false },
@@ -543,6 +705,11 @@
     let g2Index = 0;
 
     function initG2() { 
+        globalScore -= scores['g2'];
+        scores['g2'] = 0;
+        document.getElementById('g2-score').innerText = "0";
+        document.getElementById('score-display').innerText = globalScore;
+
         g2Index = 0; 
         g2Data.forEach(d => d.solved = false);
         loadG2(); 
@@ -553,13 +720,14 @@
         fb.innerHTML = "";
         
         if(g2Index >= g2Data.length) {
+            playSound('win');
             document.getElementById('g2-bank').innerHTML = "🎉 完美！第一人稱干擾已全數殲滅！";
             document.getElementById('g2-drop').innerHTML = "";
             document.getElementById('g2-check-btn').style.display = 'none';
             document.getElementById('g2-next-btn').style.display = 'none';
             return;
         }
-        document.getElementById('g2-progress').innerText = `進度：${g2Index + 1} / 6`;
+        document.getElementById('g2-progress').innerText = `第 ${g2Index + 1} 題 / 共 6 題`;
         let bank = document.getElementById('g2-bank');
         let drop = document.getElementById('g2-drop');
         bank.innerHTML = ""; drop.innerHTML = "";
@@ -573,7 +741,7 @@
         allWords.forEach(w => {
             let chip = document.createElement('div');
             chip.className = "manga-chip"; chip.innerText = w;
-            chip.onclick = () => handleG2Click(chip);
+            chip.onclick = () => { playSound('pop'); handleG2Click(chip); };
             bank.appendChild(chip);
         });
     }
@@ -593,11 +761,13 @@
         let fb = document.getElementById('g2-feedback');
 
         if(userSeq.includes(targetData.bad)) {
-            updateScore(-1);
-            fb.innerHTML = `❌ 錯誤！新聞稿應避免使用第一人稱「<span style='color:var(--manga-red); text-decoration:underline;'>${targetData.bad}</span>」！ (-1分)`;
+            playSound('manga-wrong');
+            updateGameScore('g2', -1);
+            fb.innerHTML = `❌ 錯誤！新聞稿應避免使用第一人稱「<span style='color:var(--manga-red); text-decoration:underline;'>${targetData.bad}</span>」！請將它退回。 (-1分)`;
             fb.style.color = "var(--manga-red)";
         } else if(userSeq.length < targetData.seq.length) {
-            updateScore(-1);
+            playSound('manga-wrong');
+            updateGameScore('g2', -1);
             fb.innerHTML = "⚠️ 錯誤！請把所有正確的詞塊排入組合區！ (-1分)";
             fb.style.color = "var(--manga-red)";
         } else {
@@ -607,7 +777,8 @@
             }
             
             if(isCorrect) {
-                if(!targetData.solved) { updateScore(2); targetData.solved = true; }
+                playSound('manga-right');
+                if(!targetData.solved) { updateGameScore('g2', 2); targetData.solved = true; }
                 fb.innerHTML = "✅ 排序正確！用語客觀專業。 (+2分)";
                 fb.style.color = "var(--manga-green)";
                 document.getElementById('g2-check-btn').style.display = 'none';
@@ -617,7 +788,8 @@
                     fb.innerHTML += " (全數通關！)";
                 }
             } else {
-                updateScore(-1);
+                playSound('manga-wrong');
+                updateGameScore('g2', -1);
                 fb.innerHTML = `❌ 順序不通順！ (-1分)<br><span style='font-size:0.95rem; color:#636e72;'>提示：${targetData.errOrder}</span>`;
                 fb.style.color = "var(--manga-red)";
             }
@@ -626,7 +798,7 @@
 
     function nextG2() { g2Index++; loadG2(); }
 
-    /* ================= 關卡三：MARIO 動詞迷宮 (獨立錯誤提示) ================= */
+    /* ================= 關卡三：MARIO 動詞迷宮 ================= */
     let g3Data = [
         { q: "該公司運用全新技術 ____ 的隨身聽，掀起了熱潮。", solved: false, opts: [
             { txt: "打造", isCorrect: true },
@@ -662,6 +834,11 @@
     let g3Index = 0;
 
     function initG3() { 
+        globalScore -= scores['g3'];
+        scores['g3'] = 0;
+        document.getElementById('g3-score').innerText = "0";
+        document.getElementById('score-display').innerText = globalScore;
+
         g3Index = 0; 
         g3Data.forEach(d => d.solved = false);
         loadG3(); 
@@ -672,11 +849,12 @@
         fb.innerHTML = "";
         
         if(g3Index >= g3Data.length) {
+            playSound('mario-clear');
             document.getElementById('g3-q-text').innerHTML = "YOU WIN! 🍄 恭喜通關，成功拯救新聞稿！";
             document.getElementById('g3-doors').innerHTML = "";
             return;
         }
-        document.getElementById('g3-progress').innerText = `WORLD ${g3Index + 1}-1`;
+        document.getElementById('g3-progress').innerText = `第 ${g3Index + 1} 題 / WORLD ${g3Index + 1}-1`;
         let data = g3Data[g3Index];
         document.getElementById('g3-q-text').innerText = data.q;
         
@@ -691,15 +869,17 @@
             door.className = "mario-block"; door.innerText = obj.txt;
             door.onclick = function() {
                 if(obj.isCorrect) {
-                    if(!data.solved) { updateScore(2); data.solved = true; }
+                    playSound('mario-coin');
+                    if(!data.solved) { updateGameScore('g3', 2); data.solved = true; }
                     this.style.background = "#39ff14"; this.style.color = "#111"; this.innerHTML += " ✅";
                     fb.innerHTML = "<span style='color:#39ff14;'>🌟 CORRECT! (+2分) 進入下一關...</span>";
                     setTimeout(() => { g3Index++; loadG3(); }, 1000);
                 } else {
-                    updateScore(-1);
+                    playSound('mario-bump');
+                    updateGameScore('g3', -1);
                     this.style.borderColor = "#ff3f34"; this.style.color = "#ff3f34"; this.innerHTML += " ❌";
                     this.classList.add('error-shake');
-                    fb.innerHTML = `❌ 撞牆啦！(-1分)<br><span style='color:#fff; font-size:1.1rem;'>提示：${obj.err}</span>`;
+                    fb.innerHTML = `❌ 撞牆啦！(-1分)<br><span style='color:#fff; font-size:1.05rem;'>提示：${obj.err}</span>`;
                     
                     setTimeout(() => { 
                         this.classList.remove('error-shake');
@@ -711,7 +891,7 @@
         });
     }
 
-    /* ================= 關卡四：視覺小說 總結配對 (專屬錯誤判定) ================= */
+    /* ================= 關卡四：視覺小說 總結配對 ================= */
     let g4Data = [
         { q: "「尊貴美食區」參觀人數大幅上升兩倍。", ans: "A", solved: false,
           errFeedback: {
@@ -732,7 +912,7 @@
         { q: "現場 500 個座位全部坐滿。", ans: "A", solved: false,
           errFeedback: {
               "B": "這是一句內文，不是小標題。",
-              "C": "雖然提及現場，但這是具體的客觀數字狀態，重點在以數據增強說服力。",
+              "C": "雖然提及現場，但這是客觀數字狀態，重點在以數據增強說服力。",
               "D": "這句並沒有引述任何人的話語。",
               "E": "這不是在發布未來的活動資訊。"
           }
@@ -749,7 +929,7 @@
           errFeedback: {
               "A": "重點在於引用受訪者的話語，而非驚人的數據。",
               "B": "這是一句內文。",
-              "C": "雖然前面有客觀事實，但這句的核心重點在於「表示...」的引述，藉此增加感染力。",
+              "C": "雖然前面有客觀事實，但這句核心重點在於「表示...」的引述，增加感染力。",
               "E": "這不是在發布未來的活動資訊。"
           }
         },
@@ -771,7 +951,13 @@
     ];
 
     function initG4() {
+        globalScore -= scores['g4'];
+        scores['g4'] = 0;
+        document.getElementById('g4-score').innerText = "0";
+        document.getElementById('score-display').innerText = globalScore;
+        
         g4Data.forEach(d => d.solved = false);
+        
         let container = document.getElementById('g4-container');
         container.innerHTML = "";
         
@@ -780,7 +966,7 @@
             box.className = "vn-box";
             
             let qText = document.createElement('div');
-            qText.style.flex = "2"; qText.innerText = `${index + 1}. ${item.q}`;
+            qText.style.flex = "2"; qText.innerText = `第 ${index + 1} 題：${item.q}`;
             
             let selWrap = document.createElement('div');
             selWrap.style.flex = "1"; selWrap.style.position = "relative";
@@ -810,12 +996,18 @@
                 icon.style.position = "absolute"; icon.style.right = "10px"; icon.style.top = "15px";
 
                 if(this.value === item.ans) {
-                    if(!item.solved) { updateScore(2); item.solved = true; }
+                    playSound('vn-right');
+                    if(!item.solved) { updateGameScore('g4', 2); item.solved = true; }
                     this.style.borderColor = "var(--manga-green)"; this.style.backgroundColor = "#e6fff8";
                     icon.innerText = "✅";
                     fbText.innerHTML = "<span style='color:var(--manga-green);'>✅ 正確配對！(+2分)</span>";
+                    
+                    // 檢查是否全數通關
+                    if(g4Data.every(d => d.solved)) { setTimeout(()=>playSound('win'), 500); }
+
                 } else if(this.value !== "") {
-                    updateScore(-1);
+                    playSound('vn-wrong');
+                    updateGameScore('g4', -1);
                     this.style.borderColor = "var(--manga-red)"; this.style.backgroundColor = "#ffeaea";
                     icon.innerText = "❌";
                     this.classList.add('error-shake');
